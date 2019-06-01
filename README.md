@@ -7,4 +7,5 @@ How to Run:
 * yarn start runs the GraphQL server
 
 * Client folder contains code to seed, query, mutate, export database
-* yarn seed runs the seed mutations
+* yarn seed creates all products from the api
+* yarn clear removes all the products in the DB

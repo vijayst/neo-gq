@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "seed": "babel-node seed.js"
+    "seed": "babel-node seed.js",
+    "clear": "babel-node clear.js"
   },
   "author": "",
   "license": "ISC",
