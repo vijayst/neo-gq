@@ -13,3 +13,6 @@ contains everything to run the Apollo GraphQL server on neo4j
 contains code to seed, query, mutate, export database using Apollo client
 * yarn seed creates all products from the api
 * yarn clear removes all the products in the DB
+
+### Difficulties
+* enforcing unique constraints
