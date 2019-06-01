@@ -1,0 +1,26 @@
+{
+  "name": "neo-gq-client",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "seed": "babel-node seed.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "apollo-cache-inmemory": "^1.6.0",
+    "apollo-client": "^2.6.0",
+    "apollo-link-http": "^1.5.14",
+    "axios": "^0.19.0",
+    "dotenv": "^8.0.0",
+    "graphql": "^14.3.1",
+    "graphql-tag": "^2.10.1",
+    "node-fetch": "^2.6.0"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.4.4",
+    "@babel/core": "^7.4.5",
+    "@babel/node": "^7.4.5",
+    "@babel/preset-env": "^7.4.5"
+  }
+}
