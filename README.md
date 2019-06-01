@@ -5,7 +5,8 @@
 
 ### Server folder 
 contains everything to run the Apollo GraphQL server on neo4j
-* yarn database runs Neo4J
+* yarn database creates new Neo4J in docker container
+* docker start neo4j starts the docker container
 * yarn start runs the GraphQL server
 
 ### Client folder 

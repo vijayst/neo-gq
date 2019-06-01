@@ -3,9 +3,52 @@ type Product {
     title: String
     handle: String
     body_html: String
-    published_at: String
-    created_at: String
-    updated_at: String
+    published_at: DateTime
+    created_at: DateTime
+    updated_at: DateTime
     vendor: String
     product_type: String
+    tags: [String]
+    variants: [Variant] @relation(name: "VARIES_BY", direction: OUT)
+    images: [Image] @relation(name: "HAS_IMAGE", direction: OUT)
+    options: [Option] @relation(name: "HAS_OPTION", direction: OUT)
 }
+
+type Variant {
+    id: ID!
+    title: String
+    option1: String
+    option2: String
+    option3: String
+    sku: String
+    requires_shipping: Boolean
+    taxable: Boolean
+    featured_image: Image! @relation(name: "HAS_FEATURED_IMAGE", direction: OUT)
+    available: Boolean
+    price: Float
+    grams: Int
+    compare_at_price: Float
+    position: Int
+    created_at: DateTime
+    updated_at: DateTime
+    product: Product! @relation(name: "VARIES_BY", direction: IN)
+}
+
+type Image {
+    id: ID!
+    created_at: DateTime
+    position: Int
+    updated_at: DateTime
+    src: String
+    width: Int
+    height: Int
+    product: Product! @relation(name: "HAS_IMAGE", direction: IN)
+    variants: [Variant] @relation(name: "HAS_FEATURED_IMAGE", direction: IN)
+}
+
+type Option {
+    name: String
+    position: Int
+    values: [String]
+}
+
