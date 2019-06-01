@@ -1,0 +1,11 @@
+type Product {
+    id: ID!
+    title: String
+    handle: String
+    body_html: String
+    published_at: String
+    created_at: String
+    updated_at: String
+    vendor: String
+    product_type: String
+}
