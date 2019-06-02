@@ -47,6 +47,7 @@ type Image {
 }
 
 type Option {
+    id: ID
     name: String
     position: Int
     values: [String]

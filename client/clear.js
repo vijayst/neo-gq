@@ -42,3 +42,34 @@ client.query({
         })
     })
     .catch(error => console.error(error));
+
+    client.query({
+        query: gql`
+          query {
+            Option {
+              id
+            }
+          }
+        `,
+      })
+        .then(result => {
+            result.data.Option.forEach(o => {
+                console.log('deleting', o.id);
+                client
+                .mutate({
+                    mutation: gql(`
+                            mutation ($id: ID!) {
+                                DeleteOption(id: $id) {
+                                    id
+                                }
+                            }
+                        `),
+                    variables: {
+                        id: o.id
+                    }
+                })
+                .then(data => console.log(data))
+                .catch(error => console.error(error));
+            })
+        })
+        .catch(error => console.error(error));
