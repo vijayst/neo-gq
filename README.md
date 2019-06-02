@@ -17,4 +17,3 @@ contains code to seed, query, mutate, export database using Apollo client
 ### Difficulties
 * [Enforcing unique constraints](https://stackoverflow.com/questions/56415973/how-can-there-be-multiple-graphql-nodes-with-the-same-id)
 * [Case insensitive search is not possible with neo4j-graphql-js filter](https://grandstack.io/docs/graphql-filtering.html)
-* Searching within tags is not possible, so tags should be converted to a type

@@ -4,7 +4,8 @@
   "description": "",
   "scripts": {
     "seed": "babel-node seed.js",
-    "clear": "babel-node clear.js"
+    "clear": "babel-node clear.js",
+    "find": "babel-node find.js"
   },
   "author": "",
   "license": "ISC",
