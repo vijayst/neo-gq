@@ -21,7 +21,7 @@ axios.get('https://cupshe.com/products.json?page=3').then(response => {
         client
             .mutate({
                 mutation: gql(`
-                        mutation ($id: ID, $title: String, $handle: String, $body_html: String, $published_at: _Neo4jDateTimeInput, $created_at: _Neo4jDateTimeInput, $updated_at: _Neo4jDateTimeInput, $vendor: String, $product_type: String, $tags: [String]) {
+                        mutation ($id: ID, $title: String, $handle: String, $body_html: String, $published_at: _Neo4jDateTimeInput, $created_at: _Neo4jDateTimeInput, $updated_at: _Neo4jDateTimeInput, $vendor: String, $product_type: String, $tags: String) {
                             CreateProduct(id: $id, title: $title, handle: $handle, body_html: $body_html, published_at: $published_at, created_at: $created_at, updated_at: $updated_at, vendor: $vendor, product_type: $product_type, tags: $tags) {
                                 id,
                                 title
@@ -38,7 +38,7 @@ axios.get('https://cupshe.com/products.json?page=3').then(response => {
                     updated_at: { formatted: product.updated_at },
                     vendor: product.vendor,
                     product_type: product.product_type,
-                    tags: product.tags
+                    tags: `,${product.tags.join(',')},`
                 }
             })
             .then(() => {

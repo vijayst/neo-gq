@@ -8,7 +8,7 @@ type Product {
     updated_at: DateTime
     vendor: String
     product_type: String
-    tags: [String]
+    tags: String
     variants: [Variant] @relation(name: "VARIES_BY", direction: OUT)
     images: [Image] @relation(name: "HAS_IMAGE", direction: OUT)
     options: [Option] @relation(name: "HAS_OPTION", direction: OUT)
