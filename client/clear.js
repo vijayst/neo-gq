@@ -48,6 +48,38 @@ client
     .query({
         query: gql`
             query {
+                Variant {
+                    id
+                }
+            }
+        `
+    })
+    .then(result => {
+        result.data.Variant.forEach(v => {
+            console.log('deleting', v.id);
+            client
+                .mutate({
+                    mutation: gql(`
+                            mutation ($id: ID!) {
+                                DeleteVariant(id: $id) {
+                                    id
+                                }
+                            }
+                        `),
+                    variables: {
+                        id: v.id
+                    }
+                })
+                .then(data => console.log(data))
+                .catch(error => console.error(error));
+        });
+    })
+    .catch(error => console.error('Error from image', error.message));
+
+client
+    .query({
+        query: gql`
+            query {
                 Image {
                     id
                 }

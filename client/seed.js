@@ -43,6 +43,57 @@ axios.get('https://cupshe.com/products.json?page=3').then(response => {
             })
             .then(() => {
                 const promises = [];
+                product.variants.forEach(variant => {
+                    const promise = client
+                        .mutate({
+                            mutation: gql(`
+                                mutation ($id: ID, $title: String, $option1: String, $option2: String, $option3: String, $sku: String, $requires_shipping: Boolean, $taxable: Boolean, $available: Boolean, $price: Float, $grams: Int, $compare_at_price: Float, $position: Int, $created_at: _Neo4jDateTimeInput, $updated_at: _Neo4jDateTimeInput) {
+                                    CreateVariant(id: $id, title: $title, option1: $option1, option2: $option2, option3: $option3, sku: $sku, requires_shipping: $requires_shipping, taxable: $taxable, available: $available, price: $price, grams: $grams, compare_at_price: $compare_at_price, position: $position, created_at: $created_at, updated_at: $updated_at) {
+                                        id
+                                    }
+                                }
+                            `),
+                            variables: {
+                                id: variant.id.toString(),
+                                title: variant.title,
+                                option1: variant.option1,
+                                option2: variant.option2,
+                                option3: variant.option3,
+                                sku: variant.sku,
+                                requires_shipping: variant.requires_shipping,
+                                taxable: variant.taxable,
+                                available: variant.available,
+                                price: parseFloat(variant.price),
+                                grams: variant.grams,
+                                compare_at_price: parseFloat(variant.compare_at_price),
+                                position: variant.position,
+                                created_at: { formatted: variant.created_at },
+                                updated_at: { formatted: variant.updated_at }
+                            }
+                        })
+                        .then(() => {
+                            return client.mutate({
+                                mutation: gql(`
+                                mutation ($from: ID!, $to: ID!) {
+                                    AddProductVariants(from: { id: $from }, to: { id: $to }) {
+                                        from {
+                                            id
+                                        }
+                                    }
+                                }
+                            `),
+                                variables: {
+                                    from: product.id.toString(),
+                                    to: variant.id.toString()
+                                }
+                            });
+                        });
+                    promises.push(promise);
+                });
+                return Promise.all(promises);
+            })
+            .then(() => {
+                const promises = [];
                 product.images.forEach(image => {
                     const promise = client
                         .mutate({
