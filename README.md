@@ -15,4 +15,4 @@ contains code to seed, query, mutate, export database using Apollo client
 * yarn clear removes all the products in the DB
 
 ### Difficulties
-* enforcing unique constraints
+* [Enforcing unique constraints](https://stackoverflow.com/questions/56415973/how-can-there-be-multiple-graphql-nodes-with-the-same-id)
