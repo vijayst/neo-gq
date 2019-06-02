@@ -11,8 +11,9 @@ contains everything to run the Apollo GraphQL server on neo4j
 
 ### Client folder 
 contains code to seed, query, mutate, export database using Apollo client
-* yarn seed creates all products from the api
-* yarn clear removes all the products in the DB
+* **yarn seed** creates all products from the api
+* **yarn clear** removes all the products in the DB
+* **yarn find** queries for products matching tag, size
 
 ### Difficulties
 * [Enforcing unique constraints](https://stackoverflow.com/questions/56415973/how-can-there-be-multiple-graphql-nodes-with-the-same-id)

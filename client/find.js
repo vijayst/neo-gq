@@ -12,7 +12,14 @@ const client = new ApolloClient({
     cache: new InMemoryCache()
 });
 
-const query = gql`query ($size: String! = "XS") {
+const DEFAULT_SIZE = 'XS';
+
+let size;
+if (process.argv.length === 4) {
+    size = process.argv[3];
+}
+
+const query = gql`query ($size: String! = "${DEFAULT_SIZE}") {
     Product(
       filter: {
         variants_some: { AND: [{ option1: $size }, { available: true }] }
@@ -25,7 +32,10 @@ const query = gql`query ($size: String! = "XS") {
 
   client
     .query({
-        query
+        query,
+        variables: {
+            size
+        }
     })
     .then(result => {
         result.data.Product.forEach(p => {
