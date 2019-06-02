@@ -12,64 +12,101 @@ const client = new ApolloClient({
     cache: new InMemoryCache()
 });
 
-client.query({
-    query: gql`
-      query {
-        Product {
-          id
-        }
-      }
-    `,
-  })
+client
+    .query({
+        query: gql`
+            query {
+                Product {
+                    id
+                }
+            }
+        `
+    })
     .then(result => {
         result.data.Product.forEach(p => {
             console.log('deleting', p.id);
             client
-            .mutate({
-                mutation: gql(`
+                .mutate({
+                    mutation: gql(`
                         mutation ($id: ID!) {
                             DeleteProduct(id: $id) {
                                 id
                             }
                         }
                     `),
-                variables: {
-                    id: p.id
-                }
-            })
-            .then(data => console.log(data))
-            .catch(error => console.error(error));
-        })
+                    variables: {
+                        id: p.id
+                    }
+                })
+                .then(data => console.log(data))
+                .catch(error => console.error(error));
+        });
     })
-    .catch(error => console.error(error));
+    .catch(error => console.error('Error from product', error.message));
 
-    client.query({
+client
+    .query({
         query: gql`
-          query {
-            Option {
-              id
+            query {
+                Image {
+                    id
+                }
             }
-          }
-        `,
-      })
-        .then(result => {
-            result.data.Option.forEach(o => {
-                console.log('deleting', o.id);
-                client
+        `
+    })
+    .then(result => {
+        result.data.Image.forEach(i => {
+            console.log('deleting', i.id);
+            client
                 .mutate({
                     mutation: gql(`
+                            mutation ($id: ID!) {
+                                DeleteImage(id: $id) {
+                                    id
+                                }
+                            }
+                        `),
+                    variables: {
+                        id: i.id
+                    }
+                })
+                .then(data => console.log(data))
+                .catch(error => console.error(error));
+        });
+    })
+    .catch(error => console.error('Error from image', error.message));
+
+client
+    .query({
+        query: gql`
+            query {
+                Option {
+                    id
+                }
+            }
+        `
+    })
+    .then(result => {
+        result.data.Option.forEach(o => {
+            if (o.id) {
+                client
+                    .mutate({
+                        mutation: gql(`
                             mutation ($id: ID!) {
                                 DeleteOption(id: $id) {
                                     id
                                 }
                             }
                         `),
-                    variables: {
-                        id: o.id
-                    }
-                })
-                .then(data => console.log(data))
-                .catch(error => console.error(error));
-            })
-        })
-        .catch(error => console.error(error));
+                        variables: {
+                            id: o.id
+                        }
+                    })
+                    .then(data => console.log(data))
+                    .catch(error =>
+                        console.error('Error from option', error.message)
+                    );
+            }
+        });
+    })
+    .catch(error => console.error(error));

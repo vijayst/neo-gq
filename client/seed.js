@@ -43,6 +43,49 @@ axios.get('https://cupshe.com/products.json?page=3').then(response => {
             })
             .then(() => {
                 const promises = [];
+                product.images.forEach(image => {
+                    const promise = client
+                        .mutate({
+                            mutation: gql(`
+                                mutation ($id: ID, $created_at: _Neo4jDateTimeInput, $position: Int, $updated_at: _Neo4jDateTimeInput, $src: String, $width: Int, $height: Int) {
+                                    CreateImage(id: $id, created_at: $created_at, position: $position, updated_at: $updated_at, src: $src, width: $width, height: $height) {
+                                        id
+                                    }
+                                }
+                            `),
+                            variables: {
+                                id: image.id.toString(),
+                                created_at: { formatted: product.created_at },
+                                position: product.position,
+                                updated_at: { formatted: product.updated_at },
+                                src: product.src,
+                                width: product.width,
+                                height: product.height
+                            }
+                        })
+                        .then(() => {
+                            return client.mutate({
+                                mutation: gql(`
+                                mutation ($from: ID!, $to: ID!) {
+                                    AddProductImages(from: { id: $from }, to: { id: $to }) {
+                                        from {
+                                            id
+                                        }
+                                    }
+                                }
+                            `),
+                                variables: {
+                                    from: product.id.toString(),
+                                    to: image.id.toString()
+                                }
+                            });
+                        });
+                    promises.push(promise);
+                });
+                return Promise.all(promises);
+            })
+            .then(() => {
+                const promises = [];
                 product.options.forEach(option => {
                     option.id = (optionIndex++).toString();
                     const promise = client
