@@ -130,6 +130,30 @@ axios.get('https://cupshe.com/products.json?page=3').then(response => {
                                     to: image.id.toString()
                                 }
                             });
+                        })
+                        .then(() => {
+                            if (image.variant_ids.length) {
+                                const promises = [];
+                                image.variant_ids.forEach(imageVariantId => {
+                                    const promise = client.mutate({
+                                        mutation: gql(`
+                                        mutation ($from: ID!, $to: ID!) {
+                                            AddImageVariants(from: { id: $from }, to: { id: $to }) {
+                                                from {
+                                                    id
+                                                }
+                                            }
+                                        }
+                                    `),
+                                        variables: {
+                                            from: imageVariantId.toString(),
+                                            to: image.id.toString()
+                                        }
+                                    });
+                                    promises.push(promise);
+                                });
+                                return Promise.all(promises);
+                            }
                         });
                     promises.push(promise);
                 });
