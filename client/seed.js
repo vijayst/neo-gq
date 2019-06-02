@@ -16,7 +16,7 @@ const client = new ApolloClient({
 let optionIndex = 1;
 
 axios.get('https://cupshe.com/products.json?page=3').then(response => {
-    const products = response.data.products.slice(0, 1);
+    const products = response.data.products;
     products.forEach(product => {
         client
             .mutate({
