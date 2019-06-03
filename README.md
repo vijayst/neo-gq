@@ -11,31 +11,22 @@
 
 contains everything to run the Apollo GraphQL server on neo4j
 
--   yarn database creates new Neo4J in docker container
--   docker start neo4j starts the docker container
--   yarn start runs the GraphQL server
+-   **yarn database** creates new Neo4J in docker container
+-   **docker start** neo4j starts the docker container
+-   **yarn start** runs the GraphQL server
 
 ## Client folder
 
 contains code to seed, query, mutate, export database using Apollo client
 
 -   **yarn seed** creates all products from the api
--   **yarn clear** removes all the products in the DB
 -   **yarn find** queries for products matching tag, size
 -   **yarn update** toggles the availability of a variant
 
-## Difficulties
-
--   [Enforcing unique constraints](https://stackoverflow.com/questions/56415973/how-can-there-be-multiple-graphql-nodes-with-the-same-id)
--   [Case insensitive search is not possible with neo4j-graphql-js filter](https://grandstack.io/docs/graphql-filtering.html)
--   Inability to search within an array of strings
--   Create Index and Relations in Neo4J
-
----
-
 ## Running CQL Queries on Neo4J database
+
 For creating the database for the first time, use `yarn database` on the server folder. After that to start the `neo4j` container run `docker start neo4j`.
-To open a interactive docker shell, use the following command (where neo4j is the name of the container). 
+To open a interactive docker shell, use the following command (where neo4j is the name of the container).
 User name is neo4j and password is test.
 
 ```
@@ -44,8 +35,16 @@ docker exec --interactive --tty neo4j bin/cypher-shell
 
 Type `:exit` to exit the shell.
 
-`server/database.cql` has all the CQL queries that you can run. 
+`server/database.cql` has all the CQL queries that you can run.
 
+## Starting the GraphQL server
+
+`yarn start` on the server folder starts the GraphQL server. Keep it running. Run all the client commands in a separate terminal window.
+
+The GraphQL data can viewed using `http://localhost:4001/graphql`. The tool has
+DOCS for writing queries and mutations.
+
+`yarn seed` gets data from an API and pushes it to the neo4j database. Once seeded, use the GraphQL tool to query and mutate.
 
 ## Syntax for yarn find
 
@@ -88,3 +87,4 @@ database wherever applicable.
 CREATE CONSTRAINT ON (product:Product) ASSERT product.id IS UNIQUE;
 ```
 
+Similar CQL queries exist for relations and indexes.
