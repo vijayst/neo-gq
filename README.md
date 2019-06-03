@@ -2,6 +2,9 @@
 * [Setup Nodemon with Babel7](https://www.codementor.io/michaelumanah/how-to-set-up-babel-7-and-nodemon-with-node-js-pbj7cietc)
 * [Neo4J / GraphQL guide](https://neo4j.com/developer/graphql/)
 * [Grand Stack Starter Project](https://grandstack.io/docs/getting-started-grand-stack-starter.html)
+* [Constraints in neo4j](https://neo4j.com/docs/cypher-manual/current/schema/constraints/)
+* [Filtering with neo4j-graphql-js](https://grandstack.io/docs/graphql-filtering.html)
+* [Docker operations on neo4j](https://neo4j.com/docs/operations-manual/current/docker/operations/)
 
 ### Server folder 
 contains everything to run the Apollo GraphQL server on neo4j
@@ -40,3 +43,19 @@ becomes painful if you want it to be a general feature in your app.
 ### Unique constraints
 ID in GraphQL Schema does not enforce unique constraints in Neo4J database. Please create an index using Cipher Query on Neo4J 
 database wherever applicable. 
+
+```
+CREATE CONSTRAINT ON (product:Product) ASSERT product.id IS UNIQUE;
+CREATE CONSTRAINT ON (variant:Variant) ASSERT variant.id IS UNIQUE;
+CREATE CONSTRAINT ON (image:Image) ASSERT image.id IS UNIQUE;
+CREATE CONSTRAINT ON (option:Option) ASSERT option.id IS UNIQUE;
+```
+
+To open a interactive docker shell, use the following command (where neo4j is the name of the container). User name is neo4j
+and password is test.
+
+```
+docker exec --interactive --tty neo4j bin/cypher-shell
+````
+Type `:exit` to exit the shell.
+
