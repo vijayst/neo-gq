@@ -47,8 +47,8 @@ axios.get('https://cupshe.com/products.json?page=3').then(response => {
                     const promise = client
                         .mutate({
                             mutation: gql(`
-                                mutation ($id: ID, $title: String, $option1: String, $option2: String, $option3: String, $sku: String, $requires_shipping: Boolean, $taxable: Boolean, $available: Boolean, $price: Float, $grams: Int, $compare_at_price: Float, $position: Int, $created_at: _Neo4jDateTimeInput, $updated_at: _Neo4jDateTimeInput) {
-                                    CreateVariant(id: $id, title: $title, option1: $option1, option2: $option2, option3: $option3, sku: $sku, requires_shipping: $requires_shipping, taxable: $taxable, available: $available, price: $price, grams: $grams, compare_at_price: $compare_at_price, position: $position, created_at: $created_at, updated_at: $updated_at) {
+                                mutation ($id: ID, $title: String, $option1: String, $option1s: String, $option2: String, $option3: String, $sku: String, $requires_shipping: Boolean, $taxable: Boolean, $available: Boolean, $price: Float, $grams: Int, $compare_at_price: Float, $position: Int, $created_at: _Neo4jDateTimeInput, $updated_at: _Neo4jDateTimeInput) {
+                                    CreateVariant(id: $id, title: $title, option1: $option1, option1s: $option1s, option2: $option2, option3: $option3, sku: $sku, requires_shipping: $requires_shipping, taxable: $taxable, available: $available, price: $price, grams: $grams, compare_at_price: $compare_at_price, position: $position, created_at: $created_at, updated_at: $updated_at) {
                                         id
                                     }
                                 }
@@ -57,6 +57,7 @@ axios.get('https://cupshe.com/products.json?page=3').then(response => {
                                 id: variant.id.toString(),
                                 title: variant.title,
                                 option1: variant.option1,
+                                option1s: variant.option1.toLowerCase(),
                                 option2: variant.option2,
                                 option3: variant.option3,
                                 sku: variant.sku,

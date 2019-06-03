@@ -13,33 +13,68 @@ const client = new ApolloClient({
 });
 
 let tag;
-if (process.argv.length > 3) {
+if (process.argv.length >= 3) {
     tag = `,${process.argv[2]},`;
+} else {
+    console.log(
+        'yarn find <tag> <size>: Provide a tag and/or size. If you want to provide size, provide null for tag'
+    );
+    process.exit(0);
 }
 
 let size;
 if (process.argv.length === 4) {
-    size = process.argv[3];
+    size = process.argv[3].toLowerCase();
     if (tag === ',null,') {
         tag = undefined;
     }
 }
 
-const query = gql`query($tag: String! = ",new arrivals,", $size: String! = "XS") {
-    Product(
-      filter: {
-        AND: [
-          { tags_contains: $tag }
-          { variants_some: { AND: [{ option1: $size }, { available: true }] } }
-        ]
-      }
-    ) {
-      title
-    }
-  }
-  `;
+let query;
+if (size && tag) {
+    query = gql`
+        query($tag: String!, $size: String!) {
+            Product(
+                filter: {
+                    AND: [
+                        { tags_contains: $tag }
+                        {
+                            variants_some: {
+                                AND: [{ option1s: $size }, { available: true }]
+                            }
+                        }
+                    ]
+                }
+            ) {
+                title
+            }
+        }
+    `;
+} else if (tag) {
+    query = gql`
+        query($tag: String!) {
+            Product(filter: { tags_contains: $tag }) {
+                title
+            }
+        }
+    `;
+} else if (size) {
+    query = gql`
+        query($size: String!) {
+            Product(
+                filter: {
+                    variants_some: {
+                        AND: [{ option1s: $size }, { available: true }]
+                    }
+                }
+            ) {
+                title
+            }
+        }
+    `;
+}
 
-  client
+client
     .query({
         query,
         variables: {
@@ -51,5 +86,12 @@ const query = gql`query($tag: String! = ",new arrivals,", $size: String! = "XS")
         result.data.Product.forEach(p => {
             console.log(p.title);
         });
-        console.log('found', result.data.Product.length, 'items with tag: ', tag, 'and size: ', size);
+        console.log(
+            'found',
+            result.data.Product.length,
+            'items with tag: ',
+            tag,
+            'and size: ',
+            size
+        );
     });

@@ -18,6 +18,7 @@ type Variant {
     id: ID!
     title: String
     option1: String
+    option1s: String
     option2: String
     option3: String
     sku: String
