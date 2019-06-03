@@ -65,6 +65,14 @@ yarn update <handle> <size>
 Argument _handle_ is the product handle. Argument _size_ is the variant size (option1s). Both arguments are mandatory.
 For example, `yarn update pure-eyes-falbala-bikini-top s`
 
+## Syntax for yarn delete
+
+```
+yarn delete <handle>
+```
+
+Argument _handle_ is the product handle is mandatory. For example, `yarn delete pure-eyes-falbala-bikini-top`
+
 ## Searching on array of strings
 
 Searching on array of strings is not possible with neo4j-graphql-js built-in filters. So, I converted the array of strings
@@ -87,4 +95,18 @@ database wherever applicable.
 CREATE CONSTRAINT ON (product:Product) ASSERT product.id IS UNIQUE;
 ```
 
-Similar CQL queries exist for relations and indexes.
+Similar CQL queries exist for indexes.
+
+## Deleting a node using CQL vs DeleteXXX mutation
+
+Deleting a node using CQL does not always work.
+
+```
+MATCH(p:Product { id: "1826623357018" }) DELETE p;
+```
+
+The above delete statement gives the following error:
+_Cannot delete node<4689>, because it still has relationships. To delete this node, you must first delete its relationships._
+
+However, the `DeleteProduct` mutation from the augmented schema not only deletes the product but drops all the relations. That is how `yarn clear` command
+on the client folder deletes the entire database by performing DeleteXXX mutations.

@@ -6,7 +6,8 @@
     "seed": "babel-node seed.js",
     "clear": "babel-node clear.js",
     "find": "babel-node find.js",
-    "update": "babel-node update.js"
+    "update": "babel-node update.js",
+    "delete": "babel-node delete.js"
   },
   "author": "",
   "license": "ISC",
