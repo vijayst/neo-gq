@@ -74,6 +74,8 @@ if (size && tag) {
     `;
 }
 
+const hrStart = process.hrtime();
+
 client
     .query({
         query,
@@ -83,6 +85,9 @@ client
         }
     })
     .then(result => {
+        const hrEnd = process.hrtime(hrStart);
+        console.log('Query executed in %d ms', hrEnd[1]/1000000);
+        
         result.data.Product.forEach(p => {
             console.log(p.title);
         });
