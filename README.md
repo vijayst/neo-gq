@@ -17,6 +17,7 @@ contains code to seed, query, mutate, export database using Apollo client
 * **yarn seed** creates all products from the api
 * **yarn clear** removes all the products in the DB
 * **yarn find** queries for products matching tag, size
+* **yarn update** toggles the availability of a variant
 
 ## Difficulties
 * [Enforcing unique constraints](https://stackoverflow.com/questions/56415973/how-can-there-be-multiple-graphql-nodes-with-the-same-id)
@@ -31,6 +32,14 @@ yarn find <tag> <size>
 ``` 
 To supply only size, type null for tag. Size is case-insensitive, use XS or xs. Tag is case sensitive. For example, use "Style_Removable Padded"
 for tag in argument. Enclose the tag with single or double quote.
+`yarn find "Style_Removable Padded"` or `yarn find null s` or `yarn find null S` or `yarn find "Style_Removable Padded" s` are all valid.
+
+## Syntax for yarn update
+```
+yarn update <handle> <size>
+```
+Argument *handle* is the product handle. Argument *size* is the variant size (option1s). Both arguments are mandatory.
+For example, `yarn update pure-eyes-falbala-bikini-top s`
 
 ## Searching on array of strings
 Searching on array of strings is not possible with neo4j-graphql-js built-in filters. So, I converted the array of strings 

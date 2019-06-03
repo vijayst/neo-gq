@@ -5,7 +5,8 @@
   "scripts": {
     "seed": "babel-node seed.js",
     "clear": "babel-node clear.js",
-    "find": "babel-node find.js"
+    "find": "babel-node find.js",
+    "update": "babel-node update.js"
   },
   "author": "",
   "license": "ISC",
