@@ -109,7 +109,7 @@ client
             p.variants.sort((a, b) => a.position - b.position);
             p.variants.forEach(v => {
                 const fi = v.featured_image;
-                fi.variants.sort((a, b) => a.position - b.position);
+                fi.variants.sort((a, b) => parseInt(a.id) - parseInt(b.id));
                 const variant = {
                     id: parseInt(v.id),
                     title: v.title,
@@ -120,10 +120,11 @@ client
                     requires_shipping: v.requires_shipping,
                     taxable: v.taxable,
                     available: v.available,
-                    price: v.price.toString(),
+                    price: v.price.toFixed(2),
                     product_id: parseInt(p.id),
                     grams: v.grams,
-                    compare_at_price: v.compare_at_price && v.compare_at_price.toString(),
+                    compare_at_price:
+                        v.compare_at_price && v.compare_at_price.toString(),
                     position: v.position,
                     created_at: v.created_at.formatted,
                     updated_at: v.updated_at.formatted,
@@ -146,7 +147,7 @@ client
             const images = [];
             p.images.sort((a, b) => a.position - b.position);
             p.images.forEach(i => {
-                i.variants.sort((a, b) => a.position - b.position);
+                i.variants.sort((a, b) => parseInt(a.id) - parseInt(b.id));
                 const image = {
                     id: parseInt(i.id),
                     created_at: i.created_at.formatted,
@@ -195,19 +196,18 @@ client
         axios.get('https://cupshe.com/products.json?page=3').then(response => {
             const apiData = response.data;
             apiData.products.forEach((apiProduct, i) => {
-                if (i === 9) {
-                    const exportProduct = exportedData.products.find(
-                        p => p.id === apiProduct.id
-                    );
-                    fs.writeFile('input.json', JSON.stringify(apiProduct), () => {});
-                    fs.writeFile('output.json', JSON.stringify(exportProduct), () => {});
-                    console.log(
-                        'patch for',
-                        i,
-                        createPatch(apiProduct, exportProduct)
-                    );
+                const exportProduct = exportedData.products.find(
+                    p => p.id === apiProduct.id
+                );
+                // fs.writeFile('input.json', JSON.stringify(apiProduct), () => {});
+                // fs.writeFile('output.json', JSON.stringify(exportProduct), () => {});
+                const patch = createPatch(apiProduct, exportProduct);
+                if (patch.length === 0) {
+                    console.log('Product from API and Export are equal at', i);
+                } else {
+                    console.log('patch for', i, patch);
                     console.log('\n\n\n');
-               }
+                }
             });
         });
     });
