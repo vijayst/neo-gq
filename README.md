@@ -5,7 +5,7 @@ contains everything to run the Apollo GraphQL server on neo4j
 -   **npm run database** creates new Neo4J in docker container and starts it
 -   **npm start** runs the GraphQL server
 
-### Starting the Neo4J database (server folder)
+### Starting the Neo4J database
 
 For creating the neo4j database for the first time, use `npm run database` on the server folder. This command automatically starts the container. 
 
@@ -15,9 +15,9 @@ npm install
 npm run database
 ```
 
-In case you stop the container, start the `neo4j` container by running `docker start neo4j`. 
+`npm run database` creates a new container and starts it. In case you have stopped the container, start the `neo4j` container by running `docker start neo4j`. 
 
-### Starting the GraphQL server (server folder)
+### Starting the GraphQL server
 
 `npm start` on the server folder starts the GraphQL server. Keep it running. 
 
