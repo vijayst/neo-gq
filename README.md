@@ -76,7 +76,7 @@ npm run update <handle> <size>
 Argument _handle_ is the product handle. Argument _size_ is the variant size (option1s). Both arguments are mandatory.
 For example, `npm run update pure-eyes-falbala-bikini-top s`
 
-## Syntax for delete
+### Syntax for delete
 
 ```
 npm run delete <handle>
@@ -84,7 +84,7 @@ npm run delete <handle>
 
 Argument _handle_ is the product handle is mandatory. For example, `npm run delete pure-eyes-falbala-bikini-top`
 
-## Syntax for export
+### Syntax for export
 
 ```
 npm run export
