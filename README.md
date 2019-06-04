@@ -1,6 +1,13 @@
+I am using Yarn as package manager. Please feel free to use NPM commands!
+
 ## Server folder
 
 contains everything to run the Apollo GraphQL server on neo4j
+
+```
+cd server
+yarn
+```
 
 -   **yarn database** creates new Neo4J in docker container and starts it
 -   **docker start neo4j** starts the docker container (after stopping it)
@@ -10,9 +17,17 @@ contains everything to run the Apollo GraphQL server on neo4j
 
 contains code to seed, query, mutate, export database using Apollo client
 
+```
+cd client
+yarn
+```
+
 -   **yarn seed** creates all products from the api
 -   **yarn find** queries for products matching tag, size
 -   **yarn update** toggles the availability of a variant
+-   **yarn delete** deletes product by handle
+-   **yarn export** exports data from neo4j and compares it with data from api
+-   **yarn clear** clears all data in neo4j database
 
 ## Starting the Neo4J database (server folder)
 
@@ -58,6 +73,14 @@ yarn delete <handle>
 
 Argument _handle_ is the product handle is mandatory. For example, `yarn delete pure-eyes-falbala-bikini-top`
 
+## Syntax for yarn export (client folder)
+
+```
+yarn export
+```
+
+This exports data from neo4j database and compares it with data from api. No major differences were found. The only minor difference was date formatting. But there is no loss in data over there. In some places, date from API is formatted as "2019-05-28T06:00:55+00:00". The exported date is "2019-05-28T06:00:55Z" with no loss in precision. Both are UTC times with slightly different formatting.
+
 ## Additional notes
 
 ### Searching on array of strings
@@ -92,7 +115,6 @@ _Cannot delete node<4689>, because it still has relationships. To delete this no
 
 However, the `DeleteProduct` mutation from the augmented schema not only deletes the product but drops all the relations. That is how `yarn clear` command on the client folder deletes the entire database by performing DeleteXXX mutations.
 
-
 ## References
 
 -   [Setup Nodemon with Babel7](https://www.codementor.io/michaelumanah/how-to-set-up-babel-7-and-nodemon-with-node-js-pbj7cietc)
@@ -101,4 +123,3 @@ However, the `DeleteProduct` mutation from the augmented schema not only deletes
 -   [Constraints in neo4j](https://neo4j.com/docs/cypher-manual/current/schema/constraints/)
 -   [Filtering with neo4j-graphql-js](https://grandstack.io/docs/graphql-filtering.html)
 -   [Docker operations on neo4j](https://neo4j.com/docs/operations-manual/current/docker/operations/)
-
