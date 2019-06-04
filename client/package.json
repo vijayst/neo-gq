@@ -7,7 +7,8 @@
     "clear": "babel-node clear.js",
     "find": "babel-node find.js",
     "update": "babel-node update.js",
-    "delete": "babel-node delete.js"
+    "delete": "babel-node delete.js",
+    "export": "babel-node export.js"
   },
   "author": "",
   "license": "ISC",
