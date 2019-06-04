@@ -1,82 +1,93 @@
-I am using Yarn as package manager. Please feel free to use NPM commands!
-
 ## Server folder
 
 contains everything to run the Apollo GraphQL server on neo4j
 
+-   **npm run database** creates new Neo4J in docker container and starts it
+-   **docker start neo4j** starts the docker container (after stopping it)
+-   **npm start** runs the GraphQL server
+
+### Starting the Neo4J database (server folder)
+
+For creating the neo4j database for the first time, use `npm run database` on the server folder. This command automatically starts the container. 
+
 ```
 cd server
-yarn
+npm install
+npm run database
 ```
 
--   **yarn database** creates new Neo4J in docker container and starts it
--   **docker start neo4j** starts the docker container (after stopping it)
--   **yarn start** runs the GraphQL server
+In case you stop the container, start the `neo4j` container by running `docker start neo4j`. 
 
-## Client folder
+### Starting the GraphQL server (server folder)
 
-contains code to seed, query, mutate, export database using Apollo client
+`npm start` on the server folder starts the GraphQL server. Keep it running. 
 
 ```
-cd client
-yarn
+cd server
+npm start
 ```
 
--   **yarn seed** creates all products from the api
--   **yarn find** queries for products matching tag, size
--   **yarn update** toggles the availability of a variant
--   **yarn delete** deletes product by handle
--   **yarn export** exports data from neo4j and compares it with data from api
--   **yarn clear** clears all data in neo4j database
+The GraphQL data can viewed using `http://localhost:4001/graphql`. The tool has DOCS for writing queries and mutations.
 
-## Starting the Neo4J database (server folder)
+### Running Cipher queries
 
-For creating the neo4j database for the first time, use `yarn database` on the server folder. This command automatically starts the container. In case you stop it, start the `neo4j` container by running `docker start neo4j`. To open a interactive docker shell, use the following command (where neo4j is the name of the container). User name is neo4j and password is test.
+To open a interactive docker shell, use the following command (where neo4j is the name of the container). User name is neo4j and password is test.
 
 ```
 docker exec --interactive --tty neo4j bin/cypher-shell
 ```
 
-Type `:exit` to exit the shell. `server/database.cql` has all the CQL queries that you can run.
+Type `:exit` to exit the shell. `server/database.cql` has all the CQL queries that you can run. Run those queries in the interactive terminal.
 
-## Starting the GraphQL server (server folder)
 
-`yarn start` on the server folder starts the GraphQL server. Keep it running. Run all the client commands in a separate terminal window.
+## Client folder
 
-The GraphQL data can viewed using `http://localhost:4001/graphql`. The tool has
-DOCS for writing queries and mutations.
+contains code to seed, query, mutate, export database using Apollo client
 
-`yarn seed` gets data from an API and pushes it to the neo4j database. Once seeded, use the GraphQL tool to query and mutate.
-
-## Syntax for yarn find (client folder)
+Keep the server running in a separate terminal window. And create a new terminal window where the following client commands are run.
 
 ```
-yarn find <tag> <size>
+cd client
+npm install
+npm run seed
 ```
 
-To supply only size, type null for tag. Size is case-insensitive, use XS or xs. Tag is case sensitive. For example, use "Style_Removable Padded" for tag in argument. Enclose the tag with single or double quote. `yarn find "Style_Removable Padded"` or `yarn find null s` or `yarn find null S` or `yarn find "Style_Removable Padded" s` are all valid.
+-   **npm run seed** creates all products from the api
+-   **npm run find** queries for products matching tag, size
+-   **npm run update** toggles the availability of a variant
+-   **npm run delete** deletes product by handle
+-   **npm run export** exports data from neo4j and compares it with data from api
+-   **npm run clear** clears all data in neo4j database
 
-## Syntax for yarn update (client folder)
+### Syntax for find
 
 ```
-yarn update <handle> <size>
+npm run find <tag> <size>
+```
+
+To supply only size, type null for tag. Size is case-insensitive, use XS or xs. Tag is case sensitive. For example, use "Style_Removable Padded" for tag in argument. Enclose the tag with single or double quote. `npm run find "Style_Removable Padded"` or `npm run find null s` or `npm run find null S` or `npm run find "Style_Removable Padded" s` are all valid.
+
+### Syntax for update
+
+```
+npm run update <handle> <size>
 ```
 
 Argument _handle_ is the product handle. Argument _size_ is the variant size (option1s). Both arguments are mandatory.
-For example, `yarn update pure-eyes-falbala-bikini-top s`
+For example, `npm run update pure-eyes-falbala-bikini-top s`
 
-## Syntax for yarn delete (client folder)
-
-```
-yarn delete <handle>
-```
-
-Argument _handle_ is the product handle is mandatory. For example, `yarn delete pure-eyes-falbala-bikini-top`
-
-## Syntax for yarn export (client folder)
+## Syntax for delete
 
 ```
-yarn export
+npm run delete <handle>
+```
+
+Argument _handle_ is the product handle is mandatory. For example, `npm run delete pure-eyes-falbala-bikini-top`
+
+## Syntax for export
+
+```
+npm run export
 ```
 
 This exports data from neo4j database and compares it with data from api. No major differences were found. The only minor difference was date formatting. But there is no loss in data over there. In some places, date from API is formatted as "2019-05-28T06:00:55+00:00". The exported date is "2019-05-28T06:00:55Z" with no loss in precision. Both are UTC times with slightly different formatting.
@@ -113,7 +124,7 @@ MATCH(p:Product { id: "1826623357018" }) DELETE p;
 The above delete statement gives the following error:
 _Cannot delete node<4689>, because it still has relationships. To delete this node, you must first delete its relationships._
 
-However, the `DeleteProduct` mutation from the augmented schema not only deletes the product but drops all the relations. That is how `yarn clear` command on the client folder deletes the entire database by performing DeleteXXX mutations.
+However, the `DeleteProduct` mutation from the augmented schema not only deletes the product but drops all the relations. That is how `npm run clear` command on the client folder deletes the entire database by performing DeleteXXX mutations.
 
 ## References
 
