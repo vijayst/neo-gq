@@ -107,12 +107,12 @@ axios.get('https://cupshe.com/products.json?page=3').then(response => {
                             `),
                             variables: {
                                 id: image.id.toString(),
-                                created_at: { formatted: product.created_at },
-                                position: product.position,
-                                updated_at: { formatted: product.updated_at },
-                                src: product.src,
-                                width: product.width,
-                                height: product.height
+                                created_at: { formatted: image.created_at },
+                                position: image.position,
+                                updated_at: { formatted: image.updated_at },
+                                src: image.src,
+                                width: image.width,
+                                height: image.height
                             }
                         })
                         .then(() => {

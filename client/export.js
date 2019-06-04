@@ -5,6 +5,8 @@ import fetch from 'node-fetch';
 import { HttpLink } from 'apollo-link-http';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import axios from 'axios';
+import fs from 'fs';
+import { createPatch } from 'rfc6902';
 
 dotenv.config();
 
@@ -66,6 +68,7 @@ const query = gql`
                     src
                     variants {
                         id
+                        position
                     }
                 }
             }
@@ -80,6 +83,7 @@ const query = gql`
                 }
                 variants {
                     id
+                    position
                 }
                 src
                 width
@@ -102,8 +106,10 @@ client
         const products = [];
         result.data.Product.forEach(p => {
             const variants = [];
+            p.variants.sort((a, b) => a.position - b.position);
             p.variants.forEach(v => {
                 const fi = v.featured_image;
+                fi.variants.sort((a, b) => a.position - b.position);
                 const variant = {
                     id: parseInt(v.id),
                     title: v.title,
@@ -114,34 +120,40 @@ client
                     requires_shipping: v.requires_shipping,
                     taxable: v.taxable,
                     available: v.available,
-                    price: v.price,
+                    price: v.price.toString(),
+                    product_id: parseInt(p.id),
                     grams: v.grams,
-                    compare_at_price: v.compare_at_price,
+                    compare_at_price: v.compare_at_price && v.compare_at_price.toString(),
                     position: v.position,
                     created_at: v.created_at.formatted,
                     updated_at: v.updated_at.formatted,
                     featured_image: {
+                        alt: null,
                         id: parseInt(fi.id),
                         position: fi.position,
                         created_at: fi.created_at.formatted,
                         updated_at: fi.updated_at.formatted,
+                        product_id: parseInt(p.id),
+                        variant_ids: fi.variants.map(fiv => parseInt(fiv.id)),
                         width: fi.width,
                         height: fi.height,
-                        src: fi.src,
-                        variants: fi.variants.map(fiv => fiv.id)
+                        src: fi.src
                     }
                 };
                 variants.push(variant);
             });
 
             const images = [];
+            p.images.sort((a, b) => a.position - b.position);
             p.images.forEach(i => {
+                i.variants.sort((a, b) => a.position - b.position);
                 const image = {
                     id: parseInt(i.id),
                     created_at: i.created_at.formatted,
                     position: i.position,
                     updated_at: i.updated_at.formatted,
-                    variants: i.variants.map(v => v.id),
+                    product_id: parseInt(p.id),
+                    variant_ids: i.variants.map(v => parseInt(v.id)),
                     src: i.src,
                     width: i.width,
                     height: i.height
@@ -150,6 +162,7 @@ client
             });
 
             const options = [];
+            p.options.sort((a, b) => a.position - b.position);
             p.options.forEach(o => {
                 const option = {
                     name: o.name,
@@ -181,9 +194,20 @@ client
 
         axios.get('https://cupshe.com/products.json?page=3').then(response => {
             const apiData = response.data;
-            apiData.products.forEach(apiProduct => {
-                const exportProduct = exportedData.products.find(p => p.id === apiProduct.id);
-            })
+            apiData.products.forEach((apiProduct, i) => {
+                if (i === 9) {
+                    const exportProduct = exportedData.products.find(
+                        p => p.id === apiProduct.id
+                    );
+                    fs.writeFile('input.json', JSON.stringify(apiProduct), () => {});
+                    fs.writeFile('output.json', JSON.stringify(exportProduct), () => {});
+                    console.log(
+                        'patch for',
+                        i,
+                        createPatch(apiProduct, exportProduct)
+                    );
+                    console.log('\n\n\n');
+               }
+            });
         });
-        
     });
