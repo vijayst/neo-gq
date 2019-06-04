@@ -37,7 +37,7 @@ To open a interactive docker shell, use the following command (where neo4j is th
 docker exec --interactive --tty neo4j bin/cypher-shell
 ```
 
-Type `:exit` to exit the shell. `server/database.cql` has all the CQL queries that you can run. Run those queries in the interactive terminal.
+`server/database.cql` has all the CQL queries that you can run. Run those queries in the interactive terminal. Type `:exit` to exit the shell. 
 
 
 ## Client folder
