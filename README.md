@@ -3,7 +3,6 @@
 contains everything to run the Apollo GraphQL server on neo4j
 
 -   **npm run database** creates new Neo4J in docker container and starts it
--   **docker start neo4j** starts the docker container (after stopping it)
 -   **npm start** runs the GraphQL server
 
 ### Starting the Neo4J database (server folder)
