@@ -20,7 +20,7 @@
     "dotenv": "^8.0.0",
     "graphql": "^14.3.1",
     "graphql-tag": "^2.10.1",
-    "node-fetch": "^2.6.0",
+    "node-fetch": "^3.1.1",
     "rfc6902": "^3.0.2"
   },
   "devDependencies": {
